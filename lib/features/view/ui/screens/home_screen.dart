@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:weather_now/core/helpers/extensions.dart';
 import 'package:weather_now/core/routing/routes.dart';
+import 'package:weather_now/core/theme/app_text_style.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -11,7 +12,12 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
-        title: const Text('Weather Now'),
+        title: Text(
+          'Weather Now',
+          style: AppTextStyle.poppinsWhite20.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
         backgroundColor: const Color(0xFF2196F3),
       ),
@@ -36,15 +42,24 @@ class HomeScreen extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Image.asset(
+                    'assets/imgs/weather-bg.png',
+                    height: 150.h,
+                    width: 150.w,
+                    // fit: BoxFit.cover,
+                    cacheHeight: 192,
+                    cacheWidth: 192,
+                  ),
                   Text(
-                    "Welcome to WeatherNow 🌤️\nCheck the weather anywhere, easily",
+                    "Welcome to Weather Now 🌤️",
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      letterSpacing: 2.w,
-                      fontSize: 24.sp,
-                      color: Colors.white,
+                    style: AppTextStyle.poppinsWhite20.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
+                  ),
+                  Text(
+                    'Check the weather anywhere, easily.',
+                    style: AppTextStyle.quicksandWhite20,
                   ),
                   SizedBox(height: 20.h),
 
@@ -53,10 +68,12 @@ class HomeScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.white, width: 2.w),
                       gradient: const LinearGradient(
-                        colors: [Colors.blueAccent, Colors.blue],
+                        begin: Alignment.bottomRight,
+                        end: Alignment.bottomLeft,
+                        colors: [Colors.blue, Colors.purple],
                       ),
                       color: Colors.blueAccent,
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(20.r),
                     ),
                     child: TextButton(
                       onPressed: () {
@@ -64,7 +81,11 @@ class HomeScreen extends StatelessWidget {
                       },
                       child: const Text(
                         "Check Weather",
-                        style: TextStyle(color: Colors.white, fontSize: 18),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Poppins',
+                          fontSize: 18,
+                        ),
                       ),
                     ),
                   ),
@@ -75,7 +96,12 @@ class HomeScreen extends StatelessWidget {
 
                 child: Text(
                   "Simple weather. Anytime.",
-                  style: TextStyle(fontSize: 18.sp, color: Colors.white),
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontFamily: 'Quicksand',
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],
