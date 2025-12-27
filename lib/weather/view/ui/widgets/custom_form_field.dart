@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:weather_now/weather/cubits/weather_search/weather_search_cubit.dart';
 
 class CustomFormField extends StatelessWidget {
   final TextEditingController controller;
-  final void Function(String)? onChanged;
-  const CustomFormField({super.key, required this.controller, this.onChanged});
+  const CustomFormField({super.key, required this.controller,});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (value) => cityValidation(value),
-      onChanged: onChanged,
+      onChanged: (value) {
+        if (value.isNotEmpty && value.length >= 2) {
+      context.read<WeatherSearchCubit>().searchCity(value);
+    } else {
+      context.read<WeatherSearchCubit>().clearResults();
+    }
+      },
       keyboardType: TextInputType.text,
       textInputAction: TextInputAction.search,
       controller: controller,

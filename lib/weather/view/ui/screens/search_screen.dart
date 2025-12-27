@@ -28,6 +28,14 @@ class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController searchController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  void liveSearch(String query) {
+    if (query.isNotEmpty && query.length >= 2) {
+      context.read<WeatherSearchCubit>().searchCity(query);
+    } else {
+      context.read<WeatherSearchCubit>().clearResults();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,23 +69,29 @@ class _SearchScreenState extends State<SearchScreen> {
               SizedBox(height: 10.h),
               CustomFormField(controller: searchController),
               SizedBox(height: 20.h),
-              ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll(Colors.blueAccent),
-                  padding: WidgetStatePropertyAll(
-                    EdgeInsets.symmetric(horizontal: 40.w, vertical: 12.h),
-                  ),
-                ),
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    // Perform search action
-                    context.read<WeatherSearchCubit>().searchCity(
-                      searchController.text,
-                    );
-                  }
-                },
-                child: Text('Search', style: AppTextStyle.poppinsWhite20),
-              ),
+              // Container(
+              //   width: 120.w,
+              //   decoration: BoxDecoration(
+              //     color: Colors.blueAccent,
+              //     borderRadius: BorderRadius.circular(10.r),
+              //   ),
+              //   child: TextButton(
+              //     onPressed: () {
+              //       if (_formKey.currentState!.validate()) {
+              //         // Perform search action
+              //         context.read<WeatherSearchCubit>().searchCity(
+              //           searchController.text,
+              //         );
+              //       }
+              //     },
+              //     child: Text(
+              //       'Search',
+              //       style: AppTextStyle.poppinsWhite20.copyWith(
+              //         fontSize: 15.sp,
+              //       ),
+              //     ),
+              //   ),
+              // ),
               SizedBox(height: 30.h),
               BlocConsumer<WeatherSearchCubit, WeatherSearchState>(
                 listener: (context, state) {
@@ -130,7 +144,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                   '${state.results[index]['state']}, ${state.results[index]['country']}',
                                   style: AppTextStyle.quicksandWhite20.copyWith(
                                     fontSize: 14.sp,
-                                    color: Colors.black54,
+                                    color: Colors.white30,
                                   ),
                                 ),
                               ),

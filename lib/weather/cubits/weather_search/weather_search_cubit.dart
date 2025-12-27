@@ -24,4 +24,9 @@ class WeatherSearchCubit extends Cubit<WeatherSearchState> {
     );
     // Handle the response as needed
   }
+
+  void clearResults() {
+  emit(WeatherSearchEmpty());
+}
+
 }
