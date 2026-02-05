@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:weather_now/core/helpers/extensions.dart';
+import 'package:weather_now/core/routing/routes.dart';
 import 'package:weather_now/core/theme/app_text_style.dart';
 import 'package:weather_now/weather/cubits/weather_search/weather_search_cubit.dart';
+import 'package:weather_now/weather/view/ui/widgets/background_container.dart';
 import 'package:weather_now/weather/view/ui/widgets/custom_form_field.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -15,10 +17,12 @@ class SearchScreen extends StatefulWidget {
 
 @override
 class _SearchScreenState extends State<SearchScreen> {
+  @override
   void initState() {
     super.initState();
   }
 
+  @override
   void dispose() {
     // TODO: implement dispose
     searchController.dispose();
@@ -47,119 +51,99 @@ class _SearchScreenState extends State<SearchScreen> {
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
         ),
       ),
-      body: Form(
-        key: _formKey,
-        child: Container(
-          width: double.infinity,
-          height: MediaQuery.of(context).size.height - kToolbarHeight,
-          padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
-          alignment: Alignment.center,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color(0xFF2196F3), // Blue color at the top
-                Color(0xFF90CAF9), // Lighter blue color at the bottom
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Form(
+          key: _formKey,
+          child: BackgroundContainer(
+            containerChild: Column(
+              children: [
+                SizedBox(height: 10.h),
+                CustomFormField(controller: searchController),
+                SizedBox(height: 20.h),
+                SizedBox(height: 30.h),
+                BlocConsumer<WeatherSearchCubit, WeatherSearchState>(
+                  listener: (context, state) {
+                    // TODO: implement listener
+                  },
+                  builder: (context, state) {
+                    if (state is WeatherSearchLoading) {
+                      return Center(
+                        child: CircularProgressIndicator(color: Colors.white),
+                      );
+                    }
+                    if (state is WeatherSearchEmpty) {
+                      return Align(
+                        heightFactor: 10.5.h,
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Type a correct city name to search',
+                          textAlign: TextAlign.center,
+                          style: AppTextStyle.quicksandWhite20.copyWith(
+                            fontSize: 16.sp,
+                          ),
+                        ),
+                      );
+                    }
+                    if (state is WeatherSearchFailure) {
+                      // Handle failure state
+                      return Align(
+                        heightFactor: 10.5.h,
+                        alignment: Alignment.center,
+                        child: Text(
+                          state.message,
+                          textAlign: TextAlign.center,
+                          style: AppTextStyle.quicksandWhite20.copyWith(
+                            fontSize: 16.sp,
+                          ),
+                        ),
+                      );
+                    }
+                    if (state is WeatherSearchSuccess) {
+                      return Expanded(
+                        child: ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          itemCount: state.searchResults.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () {
+                                context.pushNamed(
+                                  Routes.weatherResultScreen,
+                                  arguments: state.searchResults[index],
+                                );
+                              },
+                              child: Column(
+                                children: [
+                                  ListTile(
+                                    title: Text(
+                                      state.searchResults[index].name,
+                                      style: AppTextStyle.poppinsWhite20
+                                          .copyWith(fontSize: 18.sp),
+                                    ),
+                                    subtitle: Text(
+                                      '${state.searchResults[index].region}, ${state.searchResults[index].country}',
+                                      style: AppTextStyle.quicksandWhite20
+                                          .copyWith(
+                                            fontSize: 14.sp,
+                                            color: Colors.white30,
+                                          ),
+                                    ),
+                                  ),
+
+                                  Divider(thickness: 1, color: Colors.grey),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    }
+                    return SizedBox.shrink();
+                  },
+                ),
               ],
             ),
-          ),
-          child: Column(
-            children: [
-              SizedBox(height: 10.h),
-              CustomFormField(controller: searchController),
-              SizedBox(height: 20.h),
-              // Container(
-              //   width: 120.w,
-              //   decoration: BoxDecoration(
-              //     color: Colors.blueAccent,
-              //     borderRadius: BorderRadius.circular(10.r),
-              //   ),
-              //   child: TextButton(
-              //     onPressed: () {
-              //       if (_formKey.currentState!.validate()) {
-              //         // Perform search action
-              //         context.read<WeatherSearchCubit>().searchCity(
-              //           searchController.text,
-              //         );
-              //       }
-              //     },
-              //     child: Text(
-              //       'Search',
-              //       style: AppTextStyle.poppinsWhite20.copyWith(
-              //         fontSize: 15.sp,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              SizedBox(height: 30.h),
-              BlocConsumer<WeatherSearchCubit, WeatherSearchState>(
-                listener: (context, state) {
-                  // TODO: implement listener
-                },
-                builder: (context, state) {
-                  if (state is WeatherSearchEmpty) {
-                    return Align(
-                      heightFactor: 10.5.h,
-                      alignment: Alignment.center,
-                      child: Text(
-                        'Please enter a city name',
-                        textAlign: TextAlign.center,
-                        style: AppTextStyle.quicksandWhite20.copyWith(
-                          fontSize: 16.sp,
-                        ),
-                      ),
-                    );
-                  }
-                  if (state is WeatherSearchFailure) {
-                    // Handle failure state
-                    return Align(
-                      heightFactor: 10.5.h,
-                      alignment: Alignment.center,
-                      child: Text(
-                        state.message,
-                        textAlign: TextAlign.center,
-                        style: AppTextStyle.quicksandWhite20.copyWith(
-                          fontSize: 16.sp,
-                        ),
-                      ),
-                    );
-                  }
-                  if (state is WeatherSearchSuccess) {
-                    return Expanded(
-                      child: ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        itemCount: state.results.length,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            children: [
-                              ListTile(
-                                title: Text(
-                                  state.results[index]['name'],
-                                  style: AppTextStyle.poppinsWhite20.copyWith(
-                                    fontSize: 18.sp,
-                                  ),
-                                ),
-                                subtitle: Text(
-                                  '${state.results[index]['state']}, ${state.results[index]['country']}',
-                                  style: AppTextStyle.quicksandWhite20.copyWith(
-                                    fontSize: 14.sp,
-                                    color: Colors.white30,
-                                  ),
-                                ),
-                              ),
-
-                              Divider(thickness: 1, color: Colors.grey),
-                            ],
-                          );
-                        },
-                      ),
-                    );
-                  }
-                  return SizedBox.shrink();
-                },
-              ),
-            ],
           ),
         ),
       ),

@@ -15,7 +15,8 @@ final class WeatherSearchFailure extends WeatherSearchState {
 }
 
 final class WeatherSearchEmpty extends WeatherSearchState {}
+
 final class WeatherSearchSuccess extends WeatherSearchState {
-  final List<dynamic> results;
-  WeatherSearchSuccess(this.results);
+  final List<WeatherSearchModel> searchResults;
+  WeatherSearchSuccess(this.searchResults);
 }

@@ -19,9 +19,11 @@ class AppRoutes {
             child: SearchScreen(),
           ),
         );
-      case Routes.resultScreen:
+      case Routes.weatherResultScreen:
         // Return the route for the result screen
-        return MaterialPageRoute(builder: (_) => WeatherResultScreen());
+        return MaterialPageRoute(
+          builder: (_) => WeatherResultScreen(),
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

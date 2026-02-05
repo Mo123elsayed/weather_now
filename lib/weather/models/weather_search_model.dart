@@ -1,41 +1,47 @@
 class WeatherSearchModel {
+  final int id;
   final String name;
+  final String region;
+  final String country;
   final double lat;
   final double lon;
-  final String country;
-  final String? state;
-  final Map<String, String>? localNames;
+  final String url;
 
   WeatherSearchModel({
+    required this.id,
     required this.name,
+    required this.region,
+    required this.country,
     required this.lat,
     required this.lon,
-    required this.country,
-    this.state,
-    this.localNames,
+    required this.url,
   });
 
   factory WeatherSearchModel.fromJson(Map<String, dynamic> json) {
     return WeatherSearchModel(
-      name: json['name'],
+      id: json['id'] as int,
+      name: json['name'] as String,
+      region: json['region'] ?? '',
+      country: json['country'] as String,
       lat: (json['lat'] as num).toDouble(),
       lon: (json['lon'] as num).toDouble(),
-      country: json['country'],
-      state: json['state'],
-      localNames: json['local_names'] != null
-          ? Map<String, String>.from(json['local_names'])
-          : null,
+      url: json['url'] as String,
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'lat': lat,
-      'lon': lon,
-      'country': country,
-      'state': state,
-      'local_names': localNames,
-    };
+  /// Converts a list of JSON objects into a list of [WeatherSearchModel] objects.
+  ///
+  /// The input list is expected to contain JSON objects with the same structure
+  /// as the ones returned by the OpenWeatherMap API.
+  ///
+  /// The function returns a list of [WeatherSearchModel] objects that can be used
+  /// to display the search results.
+  ///
+  /// Throws a [FormatException] if the input list contains objects that are not
+  /// valid JSON representations of [WeatherSearchModel] objects.
+  static List<WeatherSearchModel> fromJsonList(List<dynamic> jsonList) {
+    return jsonList
+        .map((e) => WeatherSearchModel.fromJson(e))
+        .toList();
   }
 }

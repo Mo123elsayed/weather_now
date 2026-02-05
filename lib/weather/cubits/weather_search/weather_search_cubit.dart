@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:weather_now/weather/models/weather_search_model.dart';
 import 'package:weather_now/weather/repository/weather_search_repository.dart';
 
 part 'weather_search_state.dart';
@@ -10,8 +11,8 @@ class WeatherSearchCubit extends Cubit<WeatherSearchState> {
   final WeatherSearchRepository _repo = WeatherSearchRepository();
 
   Future<void> searchCity(String city) async {
-    final res = await _repo.searchCity(city);
     emit(WeatherSearchLoading());
+    final res = await _repo.searchCity(city);
     res.fold(
       ifLeft: (value) => emit(WeatherSearchFailure(value)),
       ifRight: (result) {
@@ -26,7 +27,6 @@ class WeatherSearchCubit extends Cubit<WeatherSearchState> {
   }
 
   void clearResults() {
-  emit(WeatherSearchEmpty());
-}
-
+    emit(WeatherSearchEmpty());
+  }
 }
