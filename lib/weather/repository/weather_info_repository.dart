@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dart_either/dart_either.dart';
 import 'package:dio/dio.dart';
 import 'package:weather_now/weather/models/weather_info_model.dart';
@@ -13,6 +11,13 @@ class WeatherRepository {
     ),
   );
 
+  /// Fetches the weather information for the given city.
+  ///
+  /// Emits [WeatherInfoLoading] while the weather information is being fetched.
+  /// If the weather information fetch fails, emits [WeatherInfoFailure] with the error message.
+  /// If the weather information fetch succeeds, emits [WeatherInfoSuccess] with the weather information.
+  ///
+  /// [city] The name of the city to fetch the weather information for.
   Future<Either> getWeather(String city) async {
     try {
       final response = await _dio.get(
@@ -25,13 +30,11 @@ class WeatherRepository {
           "alerts": "no",
         },
       );
-
-      /// 
+      /// fetch the API data and store it in a variable
       final res = response.data;
 
       /// serialize the response data into WeatherInfoModel
       final finalResult = WeatherInfoModel.fromJson(res);
-      log("Weather API Response:========> ${finalResult}");
       return Right(finalResult);
     } catch (e) {
       return Left("Failed to get weather data : $e");

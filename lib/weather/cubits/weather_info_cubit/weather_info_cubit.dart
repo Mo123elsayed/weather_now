@@ -12,6 +12,14 @@ class WeatherInfoCubit extends Cubit<WeatherInfoState> {
 
   final WeatherRepository _repo = WeatherRepository();
 
+  /// Fetches the weather information for the given city.
+  ///
+  /// Emits [WeatherInfoLoading] while the weather information is being fetched.
+  /// If the weather information fetch fails, emits [WeatherInfoFailure] with the error message.
+  /// If the weather information fetch succeeds, emits [WeatherInfoSuccess] with the weather information.
+  ///
+  /// [city] The name of the city to fetch the weather information for.
+  ///
   Future<void> getWeather(String city) async {
     emit(WeatherInfoLoading());
     final res = await _repo.getWeather(city);

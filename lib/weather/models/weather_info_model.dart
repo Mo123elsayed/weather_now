@@ -146,14 +146,21 @@ class Day {
 class Hour {
   final String time;
   final double tempC;
+  final double feelsLikeC;
   final WeatherCondition condition;
 
-  Hour({required this.time, required this.tempC, required this.condition});
+  Hour({
+    required this.time,
+    required this.tempC,
+    required this.feelsLikeC,
+    required this.condition,
+  });
 
   factory Hour.fromJson(Map<String, dynamic> json) {
     return Hour(
       time: json['time'],
       tempC: json['temp_c'].toDouble(),
+      feelsLikeC: json['feelslike_c'].toDouble(),
       condition: WeatherCondition.fromJson(json['condition']),
     );
   }
