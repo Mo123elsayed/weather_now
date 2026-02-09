@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_now/weather/cubits/weather_info_cubit/weather_info_cubit.dart';
@@ -13,37 +15,22 @@ class WeatherResultScreen extends StatefulWidget {
 
 class _WeatherResultScreenState extends State<WeatherResultScreen> {
   @override
+  @override
   Widget build(BuildContext context) {
-    final args =
-        ModalRoute.of(context)!.settings.arguments as WeatherSearchModel?;
+    final rawArgs =
+        ModalRoute.of(context)?.settings.arguments as WeatherSearchModel;
 
-    // final selectedCity = weatherResults.firstWhere(
-    //   (weather) => weather.lat == cityLat && weather.lon == cityLon,
-    //   orElse: () => WeatherModel(
-    //     cityName: 'Unknown',
-    //     country: 'Unknown',
-    //     lat: 0.0,
-    //     lon: 0.0,
-    //     temp: 0.0,
-    //     feelsLike: 0.0,
-    //     tempMin: 0.0,
-    //     tempMax: 0.0,
-    //     pressure: 0,
-    //     humidity: 0,
-    //     visibility: 0,
-    //     weatherMain: 'Unknown',
-    //     weatherDescription: 'Unknown',
-    //     weatherIcon: '01d',
-    //     windSpeed: 0.0,
-    //     windDeg: 0,
-    //     cloudiness: 0,
-    //     sunrise: 0,
-    //     sunset: 0,
-    //   ),
-    // );
+    final route = ModalRoute.of(context);
+    log("ROUTE = $route");
+    log("ARGS = $rawArgs");
+    log("ARGS LAT = ${rawArgs.lat}");
+    log("ARGS LON = ${rawArgs.lon}");
+    log("ARGS NAME = ${rawArgs.name}");
 
-    if (args == null) {
-      return Scaffold(
+    return BlocProvider(
+      create: (context) => WeatherInfoCubit()
+        ..getWeather(rawArgs.name), // Pass the city name to fetch weather info
+      child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
           title: const Text('Weather Result Screen'),
@@ -52,43 +39,42 @@ class _WeatherResultScreenState extends State<WeatherResultScreen> {
             icon: const Icon(Icons.arrow_back_ios_new_rounded),
           ),
         ),
-        body: const Center(child: Text('No such city, please try again.')),
-      );
-    } else {
-      return BlocProvider(
-        create: (context) => WeatherInfoCubit()..getWeather(args.name),
-        child: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: const Text('Weather Result Screen'),
-            leading: IconButton(
-              onPressed: () => Navigator.of(context).pop(),
-              icon: const Icon(Icons.arrow_back_ios_new_rounded),
-            ),
-          ),
-          body: BackgroundContainer(
-            containerChild: BlocConsumer<WeatherInfoCubit, WeatherInfoState>(
-              listener: (context, state) {
-                // TODO: implement listener
-              },
-              builder: (context, state) {
-                if (state is WeatherInfoSuccess) {
-                  final selectedCity = state.weatherResult;
-                  return Column(
-                    children: [
-                      Text(
-                        'Weather in ${selectedCity.cityName}, ${selectedCity.country}',
-                        style: TextStyle(fontSize: 24, color: Colors.white),
-                      ),
-                    ],
-                  );
-                }
-                return SizedBox.shrink();
-              },
-            ),
+        body: BackgroundContainer(
+          containerChild: BlocConsumer<WeatherInfoCubit, WeatherInfoState>(
+            listener: (context, state) {},
+            builder: (context, state) {
+              if (state is WeatherInfoLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(color: Colors.white),
+                );
+              }
+              if (state is WeatherInfoFailure) {
+                log(state.message);
+                return Center(child: Text(state.message));
+              }
+              if (state is WeatherInfoSuccess) {
+                // final selectedCity = state.weatherResult.firstWhere((city) {
+                //   return city.location.name == rawArgs.name &&
+                //       city.location.lat == rawArgs.lat &&
+                //       city.location.lon == rawArgs.lon;
+                // });
+
+                log("SELECTED CITY = ${state.weatherResult.location.name}");
+
+                return Column(
+                  children: [
+                    Text(
+                      'Weather in ${state.weatherResult.location.name}: ${state.weatherResult.current.tempC}°C',
+                      style: const TextStyle(fontSize: 24, color: Colors.white),
+                    ),
+                  ],
+                );
+              }
+              return const SizedBox.shrink();
+            },
           ),
         ),
-      );
-    }
+      ),
+    );
   }
 }

@@ -22,6 +22,7 @@ class AppRoutes {
       case Routes.weatherResultScreen:
         // Return the route for the result screen
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => WeatherResultScreen(),
         );
       default:

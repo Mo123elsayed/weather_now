@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:dart_either/dart_either.dart';
 import 'package:dio/dio.dart';
+import 'package:weather_now/weather/models/weather_info_model.dart';
 
 class WeatherRepository {
   final Dio _dio = Dio(
@@ -16,16 +19,20 @@ class WeatherRepository {
         "/forecast.json",
         queryParameters: {
           "q": city,
-          "appid": "76e1472be19e4c77a17152123261601",
-          "units": "metric",
+          "key": "76e1472be19e4c77a17152123261601",
           "days": 7,
           "aqi": "no",
           "alerts": "no",
         },
       );
+
+      /// 
       final res = response.data;
-      print("res =======================================> : $res");
-      return Right(res);
+
+      /// serialize the response data into WeatherInfoModel
+      final finalResult = WeatherInfoModel.fromJson(res);
+      log("Weather API Response:========> ${finalResult}");
+      return Right(finalResult);
     } catch (e) {
       return Left("Failed to get weather data : $e");
     }

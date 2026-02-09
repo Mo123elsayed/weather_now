@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BackgroundContainer extends StatelessWidget {
   final containerChild;
-  const BackgroundContainer({super.key,this.containerChild});
+  const BackgroundContainer({super.key, this.containerChild});
 
   @override
   Widget build(BuildContext context) {

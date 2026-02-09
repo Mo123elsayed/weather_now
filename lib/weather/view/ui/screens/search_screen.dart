@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -106,11 +108,12 @@ class _SearchScreenState extends State<SearchScreen> {
                           itemCount: state.searchResults.length,
                           itemBuilder: (context, index) {
                             return GestureDetector(
-                              behavior: HitTestBehavior.opaque,
                               onTap: () {
+                                final selectedCity = state.searchResults[index];
+                                
                                 context.pushNamed(
                                   Routes.weatherResultScreen,
-                                  arguments: state.searchResults[index],
+                                  arguments: selectedCity,
                                 );
                               },
                               child: Column(

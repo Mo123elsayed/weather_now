@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dart_either/dart_either.dart';
 import 'package:dio/dio.dart';
 import 'package:weather_now/weather/models/weather_search_model.dart';
@@ -15,18 +17,13 @@ class WeatherSearchRepository {
     try {
       final response = await _dio.get(
         "search.json",
-        queryParameters: {
-          "q": query,
-          "key": "76e1472be19e4c77a17152123261601",
-        },
+        queryParameters: {"q": query, "key": "76e1472be19e4c77a17152123261601"},
       );
       final res = response.data;
       final List<WeatherSearchModel> searchResults =
           WeatherSearchModel.fromJsonList(res);
-      print("res ==========================================> $searchResults");
-      print(
-        "res.runtimeType ==========================================> ${searchResults.runtimeType}",
-      );
+      log("Search Results =======> $searchResults");
+      log("Search Results Type =========> ${searchResults.runtimeType}");
       return Right(searchResults);
     } catch (e) {
       return Left('Failed to search city: $e');
