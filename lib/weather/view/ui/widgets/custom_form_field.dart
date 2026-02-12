@@ -5,7 +5,7 @@ import 'package:weather_now/weather/cubits/weather_search/weather_search_cubit.d
 
 class CustomFormField extends StatelessWidget {
   final TextEditingController controller;
-  const CustomFormField({super.key, required this.controller,});
+  const CustomFormField({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -13,11 +13,11 @@ class CustomFormField extends StatelessWidget {
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (value) => cityValidation(value),
       onChanged: (value) {
-        if (value.isNotEmpty && value.length >= 2) {
-      context.read<WeatherSearchCubit>().searchCity(value);
-    } else {
-      context.read<WeatherSearchCubit>().clearResults();
-    }
+        if (value.isNotEmpty) {
+          context.read<WeatherSearchCubit>().searchCity(value);
+        } else {
+          context.read<WeatherSearchCubit>().clearResults();
+        }
       },
       keyboardType: TextInputType.text,
       textInputAction: TextInputAction.search,

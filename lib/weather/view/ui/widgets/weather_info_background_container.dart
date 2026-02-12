@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class BackgroundContainer extends StatelessWidget {
+class WeatherInfoBackgroundContainer extends StatelessWidget {
   final containerChild;
-  const BackgroundContainer({super.key, this.containerChild});
+  const WeatherInfoBackgroundContainer({super.key, this.containerChild});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      // width: double.infinity,
-      height: MediaQuery.of(context).size.height - kToolbarHeight,
+      width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
       alignment: Alignment.center,
       decoration: const BoxDecoration(
