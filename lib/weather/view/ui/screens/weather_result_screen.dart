@@ -8,6 +8,7 @@ import 'package:weather_now/weather/models/weather_search_model.dart';
 import 'package:weather_now/weather/view/ui/widgets/daily_weather_info.dart';
 import 'package:weather_now/weather/view/ui/widgets/weather_humidity_container.dart';
 import 'package:weather_now/weather/view/ui/widgets/weather_info_background_container.dart';
+import 'package:weather_now/weather/view/ui/widgets/weather_windSpeed_container.dart';
 import 'package:weather_now/weather/view/ui/widgets/week_weather_info.dart';
 
 class WeatherResultScreen extends StatefulWidget {
@@ -66,11 +67,11 @@ class _WeatherResultScreenState extends State<WeatherResultScreen> {
                   state.weatherResult.forecast.forecastday[0].hour;
               final weatherDays = state.weatherResult.forecast.forecastday;
               final weatherHumidity = state.weatherResult.current.humidity;
+              final weatherWindspd = state.weatherResult.current.windKph;
 
               /// Return the weather information screen with the fetched weather data
               return WeatherInfoBackgroundContainer(
-                isDay:
-                    isDay, 
+                isDay: isDay,
                 containerChild: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: SingleChildScrollView(
@@ -187,7 +188,7 @@ class _WeatherResultScreenState extends State<WeatherResultScreen> {
                         Container(
                           decoration: BoxDecoration(
                             color: Color.fromARGB(20, 0, 0, 0),
-                            borderRadius: BorderRadius.circular(25.r),
+                            borderRadius: BorderRadius.circular(20.r),
                           ),
                           child: DailyWeatherInfo(hours: weatherPerHour),
                         ),
@@ -195,13 +196,27 @@ class _WeatherResultScreenState extends State<WeatherResultScreen> {
                         Container(
                           decoration: BoxDecoration(
                             color: Color.fromARGB(20, 0, 0, 0),
-                            borderRadius: BorderRadius.circular(25.r),
+                            borderRadius: BorderRadius.circular(20.r),
                           ),
                           child: WeekWeatherInfo(days: weatherDays),
                         ),
                         SizedBox(height: 20.h),
-                        WeatherHumidityContainer(
-                          weatherHumidity: weatherHumidity,
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: WeatherHumidityContainer(
+                                weatherHumidity: weatherHumidity,
+                              ),
+                            ),
+                            SizedBox(width: 10.w),
+                            Expanded(
+                              flex: 1,
+                              child: WeatherWindspeedContainer(
+                                windSpeed: weatherWindspd,
+                              ),
+                            ),
+                          ],
                         ),
                         SizedBox(height: 20.h),
                       ],

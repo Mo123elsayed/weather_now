@@ -41,12 +41,6 @@ class WeekWeatherInfo extends StatelessWidget {
                             fit: BoxFit.cover,
                           ),
                           SizedBox(width: 20.w),
-                          CachedNetworkImage(
-                            imageUrl: "https:${d.day.condition.icon}",
-                            width: 40.w,
-                            fit: BoxFit.cover,
-                          ),
-                          SizedBox(width: 20.w),
                           Text(
                             "${d.day.maxtempC.round()}°",
                             style: AppTextStyle.quicksandWhite20.copyWith(

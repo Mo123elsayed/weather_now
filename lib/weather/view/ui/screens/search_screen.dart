@@ -6,7 +6,7 @@ import 'package:weather_now/core/routing/routes.dart';
 import 'package:weather_now/core/theme/app_text_style.dart';
 import 'package:weather_now/weather/cubits/weather_search/weather_search_cubit.dart';
 import 'package:weather_now/weather/view/ui/widgets/background_container.dart';
-import 'package:weather_now/weather/view/ui/widgets/custom_form_field.dart';
+import 'package:weather_now/weather/view/ui/widgets/search_form_field.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});

@@ -3,9 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:weather_now/core/theme/app_text_style.dart';
 
-class WeatherHumidityContainer extends StatelessWidget {
-  final int weatherHumidity;
-  const WeatherHumidityContainer({super.key, required this.weatherHumidity});
+class WeatherWindspeedContainer extends StatelessWidget {
+  final double windSpeed;
+
+  const WeatherWindspeedContainer({super.key, required this.windSpeed});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,6 @@ class WeatherHumidityContainer extends StatelessWidget {
       ),
       width: 150.w,
       height: 160.h,
-
       decoration: BoxDecoration(
         color: Color.fromARGB(20, 0, 0, 0),
         borderRadius: BorderRadius.circular(20.r),
@@ -29,37 +29,37 @@ class WeatherHumidityContainer extends StatelessWidget {
             padding: const EdgeInsets.only(left: 8.0),
             child: Row(
               children: [
-                Icon(Icons.water_drop_outlined, color: Colors.white),
+                Icon(Icons.air_outlined, color: Colors.white),
                 SizedBox(width: 5.w),
                 Text(
-                  'Humidity',
+                  'Wind Speed',
                   style: AppTextStyle.poppinsWhite20.copyWith(
                     fontSize: 15.sp,
                     fontWeight: FontWeight.bold,
                   ),
+                  overflow: TextOverflow.visible,
                 ),
               ],
             ),
           ),
-          SizedBox(height: 40.h),
+          SizedBox(height: 62.h),
           Column(
             children: [
               Container(
                 padding: EdgeInsets.only(left: 8.w),
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "${weatherHumidity}%",
+                  "${windSpeed} km/h",
                   style: AppTextStyle.poppinsWhite20.copyWith(
-                    fontSize: 40.sp,
+                    fontSize: 25.sp,
                     fontWeight: FontWeight.bold,
                   ),
-                  textAlign: TextAlign.start,
                 ),
               ),
               LinearPercentIndicator(
                 padding: EdgeInsets.symmetric(horizontal: 7.w),
                 lineHeight: 10.0,
-                percent: weatherHumidity / 100,
+                percent: windSpeed / 100,
                 animation: true,
                 animationDuration: 800,
                 barRadius: const Radius.circular(20),

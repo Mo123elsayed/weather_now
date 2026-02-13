@@ -42,7 +42,7 @@ dependencies:
   intl: ^0.20.2
   cached_network_image: ^3.4.1
   percent_indicator: ^4.2.5
-
+  syncfusion_flutter_gauges: ^31.1.18
 dev_dependencies:
   flutter_test:
     sdk: flutter
