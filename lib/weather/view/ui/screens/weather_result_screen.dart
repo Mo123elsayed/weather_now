@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:weather_now/core/theme/app_text_style.dart';
 import 'package:weather_now/weather/cubits/weather_info_cubit/weather_info_cubit.dart';
 import 'package:weather_now/weather/models/weather_search_model.dart';
@@ -68,6 +69,7 @@ class _WeatherResultScreenState extends State<WeatherResultScreen> {
               final weatherDays = state.weatherResult.forecast.forecastday;
               final weatherHumidity = state.weatherResult.current.humidity;
               final weatherWindspd = state.weatherResult.current.windKph;
+              // final weatherFeelsLike = state.weatherResult.forecast.forecastday[0].day.;
 
               /// Return the weather information screen with the fetched weather data
               return WeatherInfoBackgroundContainer(
@@ -131,7 +133,7 @@ class _WeatherResultScreenState extends State<WeatherResultScreen> {
                             CachedNetworkImage(
                               height: 160.h,
                               imageUrl:
-                                  "https:${state.weatherResult.current.condition.icon.replaceAll('64x64', '128x128')}",
+                                  "https:${state.weatherResult.current.condition.icon}",
                               fit: BoxFit.cover,
                             ),
                           ],
@@ -217,6 +219,14 @@ class _WeatherResultScreenState extends State<WeatherResultScreen> {
                               ),
                             ),
                           ],
+                        ),
+                        SizedBox(height: 20.h),
+                        Text(
+                          'Updated ${DateFormat("d MMM, h:mm a").format(DateTime.now())}',
+                          style: AppTextStyle.poppinsWhite20.copyWith(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         SizedBox(height: 20.h),
                       ],
