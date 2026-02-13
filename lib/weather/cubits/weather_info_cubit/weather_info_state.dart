@@ -9,7 +9,9 @@ sealed class WeatherInfoState extends Equatable {
 
 final class WeatherInfoInitial extends WeatherInfoState {}
 
-final class WeatherInfoLoading extends WeatherInfoState {}
+final class WeatherInfoLoading extends WeatherInfoState {
+  
+}
 
 final class WeatherInfoFailure extends WeatherInfoState {
   final message;

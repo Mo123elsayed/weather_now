@@ -51,7 +51,7 @@ class WeekWeatherInfo extends StatelessWidget {
                           SizedBox(width: 20.w),
 
                           Text(
-                            "${d.day.mintempC.toInt()}°",
+                            "${d.day.mintempC.round()}°",
                             style: AppTextStyle.quicksandWhite20.copyWith(
                               fontSize: 18.sp,
                               fontWeight: FontWeight.bold,

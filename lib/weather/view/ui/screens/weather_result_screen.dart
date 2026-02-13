@@ -48,9 +48,11 @@ class _WeatherResultScreenState extends State<WeatherResultScreen> {
             // TODO: implement listener
           },
           builder: (context, state) {
-            // if (state is WeatherInfoLoading) {
-            //   return const Center(child: CircularProgressIndicator());
-            // }
+            if (state is WeatherInfoLoading) {
+              return AlertDialog(
+                content: const Center(child: CircularProgressIndicator()),
+              );
+            }
             if (state is WeatherInfoFailure) {
               return Center(
                 child: Text(
@@ -178,7 +180,6 @@ class _WeatherResultScreenState extends State<WeatherResultScreen> {
                             ),
                           ],
                         ),
-                        // SizedBox(height: 20.h),
                         Text(
                           'Feels like ${state.weatherResult.current.feelslikeC.round()}°',
                           style: AppTextStyle.poppinsWhite20.copyWith(
