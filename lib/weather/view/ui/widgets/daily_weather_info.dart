@@ -29,8 +29,9 @@ class DailyWeatherInfo extends StatelessWidget {
                     children: [
                       Text(
                         formatTo12Hour(h.time),
-                        style: AppTextStyle.quicksandWhite20.copyWith(
-                          fontSize: 15.sp,
+                        style: AppTextStyle.poppinsWhite20.copyWith(
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       CachedNetworkImage(
@@ -59,6 +60,6 @@ class DailyWeatherInfo extends StatelessWidget {
 
   String formatTo12Hour(String time) {
     final dt = DateTime.parse(time);
-    return DateFormat('h a').format(dt);
+    return DateFormat('h:mm a').format(dt);
   }
 }

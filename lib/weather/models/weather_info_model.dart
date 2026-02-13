@@ -148,7 +148,6 @@ class Hour {
   final double tempC;
   final double feelsLikeC;
   final WeatherCondition condition;
-
   Hour({
     required this.time,
     required this.tempC,

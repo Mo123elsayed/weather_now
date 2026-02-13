@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
@@ -23,22 +24,44 @@ class WeekWeatherInfo extends StatelessWidget {
                   width: 70,
                   margin: const EdgeInsets.symmetric(horizontal: 6),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        d.date, // 18:00
+                        formatDayLabel(d.date),
                         style: const TextStyle(color: Colors.white),
                       ),
-                      Image.network(
-                        "https:${d.day.condition.icon.replaceAll('64x64', '128x128')}",
-                        width: 40.w,
-                      ),
-                      Text(
-                        "${d.day.mintempC.toInt()}°",
-                        style: AppTextStyle.quicksandWhite20.copyWith(
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      Row(
+                        children: [
+                          CachedNetworkImage(
+                            imageUrl: "https:${d.day.condition.icon}",
+                            width: 40.w,
+                            fit: BoxFit.cover,
+                          ),
+                          SizedBox(width: 20.w),
+                          Text(
+                            "${d.day.maxtempC.round()}°",
+                            style: AppTextStyle.quicksandWhite20.copyWith(
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(width: 20.w),
+
+                          Text(
+                            "${d.day.mintempC.toInt()}°",
+                            style: AppTextStyle.quicksandWhite20.copyWith(
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            "${d.day.avghumidity.toInt()}%",
+                            style: AppTextStyle.quicksandWhite20.copyWith(
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -51,8 +74,21 @@ class WeekWeatherInfo extends StatelessWidget {
     );
   }
 
-  String formatTo12Hour(String time) {
-    final dt = DateTime.parse(time);
-    return DateFormat('h:mm a').format(dt);
+  String formatDayLabel(String dateString) {
+    final date = DateTime.parse(dateString);
+    final now = DateTime.now();
+
+    final today = DateTime(now.year, now.month, now.day);
+    final target = DateTime(date.year, date.month, date.day);
+
+    final diff = target.difference(today).inDays;
+
+    if (diff == 0) {
+      return 'Today';
+    } else if (diff == 1) {
+      return 'Tomorrow';
+    } else {
+      return DateFormat('EE').format(date); // Monday, Tuesday...
+    }
   }
 }

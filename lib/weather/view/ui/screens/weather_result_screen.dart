@@ -40,22 +40,31 @@ class _WeatherResultScreenState extends State<WeatherResultScreen> {
       create: (context) => WeatherInfoCubit()
         ..getWeather(rawArgs.name), // Pass the city name to fetch weather info
       child: Scaffold(
-        body: WeatherInfoBackgroundContainer(
-          containerChild: BlocConsumer<WeatherInfoCubit, WeatherInfoState>(
-            listener: (context, state) {},
-            builder: (context, state) {
-              if (state is WeatherInfoLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(color: Colors.white),
-                );
-              }
-              if (state is WeatherInfoFailure) {
-                return Center(child: Text(state.message));
-              }
-              if (state is WeatherInfoSuccess) {
-                final days = state.weatherResult.forecast.forecastday;
-
-                return Padding(
+        body: BlocConsumer<WeatherInfoCubit, WeatherInfoState>(
+          listener: (context, state) {
+            // TODO: implement listener
+          },
+          builder: (context, state) {
+            if (state is WeatherInfoLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is WeatherInfoFailure) {
+              return Center(
+                child: Text(
+                  state.message,
+                  style: AppTextStyle.poppinsWhite20.copyWith(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              );
+            }
+            if (state is WeatherInfoSuccess) {
+              final bool isDay = state.weatherResult[0].current.isDay == 1;
+              final days = state.weatherResult[0].forecast.forecastday;
+              return WeatherInfoBackgroundContainer(
+                isDay:
+                    isDay, // Default value, will be updated in the BlocConsumer
+                containerChild: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: SingleChildScrollView(
                     physics: const AlwaysScrollableScrollPhysics(),
@@ -69,8 +78,9 @@ class _WeatherResultScreenState extends State<WeatherResultScreen> {
                               Icons.location_on_outlined,
                               color: Colors.white,
                             ),
+                            SizedBox(width: 10.w),
                             Text(
-                              state.weatherResult.location.name,
+                              state.weatherResult[0].location.name,
                               overflow: TextOverflow.clip,
                               style: AppTextStyle.poppinsWhite20.copyWith(
                                 fontSize: 25.sp,
@@ -93,7 +103,7 @@ class _WeatherResultScreenState extends State<WeatherResultScreen> {
                                 children: [
                                   TextSpan(
                                     text:
-                                        "${(state.weatherResult.current.tempC.round())}",
+                                        "${(state.weatherResult[0].current.tempC.round())}",
                                   ),
                                   WidgetSpan(
                                     child: Transform.translate(
@@ -114,13 +124,13 @@ class _WeatherResultScreenState extends State<WeatherResultScreen> {
                             CachedNetworkImage(
                               height: 160.h,
                               imageUrl:
-                                  "https:${state.weatherResult.current.condition.icon.replaceAll('64x64', '128x128')}",
+                                  "https:${state.weatherResult[0].current.condition.icon.replaceAll('64x64', '128x128')}",
                               fit: BoxFit.cover,
                             ),
                           ],
                         ),
                         Text(
-                          state.weatherResult.current.condition.text,
+                          state.weatherResult[0].current.condition.text,
                           style: AppTextStyle.poppinsWhite20.copyWith(
                             fontSize: 22.sp,
                             fontWeight: FontWeight.bold,
@@ -134,7 +144,7 @@ class _WeatherResultScreenState extends State<WeatherResultScreen> {
                               color: Colors.white,
                             ),
                             Text(
-                              "${state.weatherResult.forecast.forecastday[0].day.maxtempC.round()}°",
+                              "${state.weatherResult[0].forecast.forecastday[0].day.maxtempC.round()}°",
                               style: AppTextStyle.poppinsWhite20.copyWith(
                                 fontSize: 18.sp,
                               ),
@@ -144,7 +154,6 @@ class _WeatherResultScreenState extends State<WeatherResultScreen> {
                               '/',
                               style: AppTextStyle.poppinsWhite20.copyWith(
                                 fontSize: 18.sp,
-                                
                               ),
                             ),
                             SizedBox(width: 5.h),
@@ -153,7 +162,7 @@ class _WeatherResultScreenState extends State<WeatherResultScreen> {
                               color: Colors.white,
                             ),
                             Text(
-                              "${state.weatherResult.forecast.forecastday[0].day.mintempC.round()}°",
+                              "${state.weatherResult[0].forecast.forecastday[0].day.mintempC.round()}°",
                               style: AppTextStyle.poppinsWhite20.copyWith(
                                 fontSize: 18.sp,
                               ),
@@ -162,7 +171,7 @@ class _WeatherResultScreenState extends State<WeatherResultScreen> {
                         ),
                         // SizedBox(height: 20.h),
                         Text(
-                          'Feels like ${state.weatherResult.current.feelslikeC}°',
+                          'Feels like ${state.weatherResult[0].current.feelslikeC.round()}°',
                           style: AppTextStyle.poppinsWhite20.copyWith(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
@@ -176,7 +185,7 @@ class _WeatherResultScreenState extends State<WeatherResultScreen> {
                           ),
                           child: DailyWeatherInfo(
                             hours: state
-                                .weatherResult
+                                .weatherResult[0]
                                 .forecast
                                 .forecastday[0]
                                 .hour,
@@ -193,11 +202,11 @@ class _WeatherResultScreenState extends State<WeatherResultScreen> {
                       ],
                     ),
                   ),
-                );
-              }
-              return const SizedBox.shrink();
-            },
-          ),
+                ),
+              );
+            }
+            return const SizedBox.shrink(); // Return an empty widget if the state is not handled
+          },
         ),
       ),
     );

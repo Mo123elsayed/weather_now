@@ -17,6 +17,6 @@ final class WeatherInfoFailure extends WeatherInfoState {
 }
 
 final class WeatherInfoSuccess extends WeatherInfoState {
-  final WeatherInfoModel weatherResult;
+  final List<WeatherInfoModel> weatherResult;
   const WeatherInfoSuccess(this.weatherResult);
 }
