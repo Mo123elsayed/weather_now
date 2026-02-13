@@ -6,6 +6,7 @@ import 'package:weather_now/core/theme/app_text_style.dart';
 import 'package:weather_now/weather/cubits/weather_info_cubit/weather_info_cubit.dart';
 import 'package:weather_now/weather/models/weather_search_model.dart';
 import 'package:weather_now/weather/view/ui/widgets/daily_weather_info.dart';
+import 'package:weather_now/weather/view/ui/widgets/weather_humidity_container.dart';
 import 'package:weather_now/weather/view/ui/widgets/weather_info_background_container.dart';
 import 'package:weather_now/weather/view/ui/widgets/week_weather_info.dart';
 
@@ -45,9 +46,10 @@ class _WeatherResultScreenState extends State<WeatherResultScreen> {
             // TODO: implement listener
           },
           builder: (context, state) {
-            if (state is WeatherInfoLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is WeatherInfoFailure) {
+            // if (state is WeatherInfoLoading) {
+            //   return const Center(child: CircularProgressIndicator());
+            // }
+            if (state is WeatherInfoFailure) {
               return Center(
                 child: Text(
                   state.message,
@@ -59,11 +61,16 @@ class _WeatherResultScreenState extends State<WeatherResultScreen> {
               );
             }
             if (state is WeatherInfoSuccess) {
-              final bool isDay = state.weatherResult[0].current.isDay == 1;
-              final days = state.weatherResult[0].forecast.forecastday;
+              final bool isDay = state.weatherResult.current.isDay == 1;
+              final weatherPerHour =
+                  state.weatherResult.forecast.forecastday[0].hour;
+              final weatherDays = state.weatherResult.forecast.forecastday;
+              final weatherHumidity = state.weatherResult.current.humidity;
+
+              /// Return the weather information screen with the fetched weather data
               return WeatherInfoBackgroundContainer(
                 isDay:
-                    isDay, // Default value, will be updated in the BlocConsumer
+                    isDay, 
                 containerChild: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: SingleChildScrollView(
@@ -80,8 +87,7 @@ class _WeatherResultScreenState extends State<WeatherResultScreen> {
                             ),
                             SizedBox(width: 10.w),
                             Text(
-                              state.weatherResult[0].location.name,
-                              overflow: TextOverflow.clip,
+                              state.weatherResult.location.name,
                               style: AppTextStyle.poppinsWhite20.copyWith(
                                 fontSize: 25.sp,
                                 fontWeight: FontWeight.bold,
@@ -103,7 +109,7 @@ class _WeatherResultScreenState extends State<WeatherResultScreen> {
                                 children: [
                                   TextSpan(
                                     text:
-                                        "${(state.weatherResult[0].current.tempC.round())}",
+                                        "${(state.weatherResult.current.tempC.round())}",
                                   ),
                                   WidgetSpan(
                                     child: Transform.translate(
@@ -124,13 +130,13 @@ class _WeatherResultScreenState extends State<WeatherResultScreen> {
                             CachedNetworkImage(
                               height: 160.h,
                               imageUrl:
-                                  "https:${state.weatherResult[0].current.condition.icon.replaceAll('64x64', '128x128')}",
+                                  "https:${state.weatherResult.current.condition.icon.replaceAll('64x64', '128x128')}",
                               fit: BoxFit.cover,
                             ),
                           ],
                         ),
                         Text(
-                          state.weatherResult[0].current.condition.text,
+                          state.weatherResult.current.condition.text,
                           style: AppTextStyle.poppinsWhite20.copyWith(
                             fontSize: 22.sp,
                             fontWeight: FontWeight.bold,
@@ -144,7 +150,7 @@ class _WeatherResultScreenState extends State<WeatherResultScreen> {
                               color: Colors.white,
                             ),
                             Text(
-                              "${state.weatherResult[0].forecast.forecastday[0].day.maxtempC.round()}°",
+                              "${state.weatherResult.forecast.forecastday[0].day.maxtempC.round()}°",
                               style: AppTextStyle.poppinsWhite20.copyWith(
                                 fontSize: 18.sp,
                               ),
@@ -162,7 +168,7 @@ class _WeatherResultScreenState extends State<WeatherResultScreen> {
                               color: Colors.white,
                             ),
                             Text(
-                              "${state.weatherResult[0].forecast.forecastday[0].day.mintempC.round()}°",
+                              "${state.weatherResult.forecast.forecastday[0].day.mintempC.round()}°",
                               style: AppTextStyle.poppinsWhite20.copyWith(
                                 fontSize: 18.sp,
                               ),
@@ -171,7 +177,7 @@ class _WeatherResultScreenState extends State<WeatherResultScreen> {
                         ),
                         // SizedBox(height: 20.h),
                         Text(
-                          'Feels like ${state.weatherResult[0].current.feelslikeC.round()}°',
+                          'Feels like ${state.weatherResult.current.feelslikeC.round()}°',
                           style: AppTextStyle.poppinsWhite20.copyWith(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
@@ -183,13 +189,7 @@ class _WeatherResultScreenState extends State<WeatherResultScreen> {
                             color: Color.fromARGB(20, 0, 0, 0),
                             borderRadius: BorderRadius.circular(25.r),
                           ),
-                          child: DailyWeatherInfo(
-                            hours: state
-                                .weatherResult[0]
-                                .forecast
-                                .forecastday[0]
-                                .hour,
-                          ),
+                          child: DailyWeatherInfo(hours: weatherPerHour),
                         ),
                         SizedBox(height: 10.h),
                         Container(
@@ -197,8 +197,13 @@ class _WeatherResultScreenState extends State<WeatherResultScreen> {
                             color: Color.fromARGB(20, 0, 0, 0),
                             borderRadius: BorderRadius.circular(25.r),
                           ),
-                          child: WeekWeatherInfo(days: days),
+                          child: WeekWeatherInfo(days: weatherDays),
                         ),
+                        SizedBox(height: 20.h),
+                        WeatherHumidityContainer(
+                          weatherHumidity: weatherHumidity,
+                        ),
+                        SizedBox(height: 20.h),
                       ],
                     ),
                   ),

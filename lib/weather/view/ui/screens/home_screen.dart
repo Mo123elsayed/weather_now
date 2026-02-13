@@ -54,6 +54,8 @@ class HomeScreen extends StatelessWidget {
 
               /// Get Started Button
               Container(
+                width: 180.w,
+                // padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
                 decoration: BoxDecoration(
                   // border: Border.all(color: Colors.white, width: 2.w),
                   gradient: const LinearGradient(
@@ -68,13 +70,19 @@ class HomeScreen extends StatelessWidget {
                   onPressed: () {
                     context.pushNamed(Routes.searchScreen);
                   },
-                  child: const Text(
-                    "Check Weather",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Poppins',
-                      fontSize: 18,
-                    ),
+                  child: Row(
+                    children: [
+                      const Text(
+                        "Check Weather",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Poppins',
+                          fontSize: 18,
+                        ),
+                      ),
+                      SizedBox(width: 5.w),
+                      const Icon(Icons.arrow_forward, color: Colors.white),
+                    ],
                   ),
                 ),
               ),

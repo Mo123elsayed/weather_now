@@ -28,10 +28,19 @@ class WeekWeatherInfo extends StatelessWidget {
                     children: [
                       Text(
                         formatDayLabel(d.date),
-                        style: const TextStyle(color: Colors.white),
+                        style: AppTextStyle.quicksandWhite20.copyWith(
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Row(
                         children: [
+                          CachedNetworkImage(
+                            imageUrl: "https:${d.day.condition.icon}",
+                            width: 40.w,
+                            fit: BoxFit.cover,
+                          ),
+                          SizedBox(width: 20.w),
                           CachedNetworkImage(
                             imageUrl: "https:${d.day.condition.icon}",
                             width: 40.w,
@@ -49,13 +58,6 @@ class WeekWeatherInfo extends StatelessWidget {
 
                           Text(
                             "${d.day.mintempC.toInt()}°",
-                            style: AppTextStyle.quicksandWhite20.copyWith(
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            "${d.day.avghumidity.toInt()}%",
                             style: AppTextStyle.quicksandWhite20.copyWith(
                               fontSize: 18.sp,
                               fontWeight: FontWeight.bold,
