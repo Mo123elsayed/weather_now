@@ -1,108 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:weather_now/core/helpers/extensions.dart';
-import 'package:weather_now/core/routing/routes.dart';
-import 'package:weather_now/core/theme/app_text_style.dart';
 
-class HomeScreen extends StatelessWidget {
+import 'package:weather_now/core/routing/routes.dart';
+import 'package:weather_now/core/services/local_storage.dart';
+
+import 'package:weather_now/weather/models/weather_search_model.dart';
+
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _checkSavedCity();
+  }
+
+  /// Check if there's a saved city in local storage and navigate to the weather result screen if found
+  /// This allows users to quickly access their last checked city's weather without having to search for it again.
+  /// If a saved city is found, the user is automatically taken to the weather result screen, providing a seamless experience.
+  /// This function is called during the initialization of the home screen to ensure that the check is performed as soon as the app starts.
+  /// The function uses the `LocalStorage` service to retrieve the saved city and the `Navigator` to navigate to the weather result screen if a saved city is found.
+  /// Note: This function assumes that the weather result screen is set up to handle the case where a saved city is provided, and that it can display the weather information for that city accordingly.
+  void _checkSavedCity() async {
+    final savedCity = await LocalStorage.getCity();
+    if (savedCity != null) {
+      Navigator.pushReplacementNamed(
+        context,
+        Routes.weatherResultScreen,
+        arguments: WeatherSearchModel(name: savedCity),
+      );
+    }
+  }
+
+  @override
+  ///
   Widget build(BuildContext context) {
-    return Scaffold(
-      //
-      body: Stack(
-        alignment: Alignment.center,
-        children: [
-          Image.asset(
-            fit: BoxFit.cover,
-            'assets/imgs/weather_app_bg.jpg',
-            height: double.infinity,
-            width: double.infinity,
-            // fit: BoxFit.cover,
-            cacheHeight: 192,
-            cacheWidth: 192,
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                // opacity: ,
-                'assets/imgs/weather-bg.png',
-                height: 150.h,
-                width: 150.w,
-                fit: BoxFit.cover,
-                cacheHeight: 192,
-                cacheWidth: 192,
-              ),
-              SizedBox(
-                width: 250.w,
-                child: Text(
-                  "Welcome to Weather Now 🌤️",
-                  textAlign: TextAlign.center,
-                  style: AppTextStyle.poppinsWhite20.copyWith(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24.sp,
-                  ),
-                ),
-              ),
-              Text(
-                'Check the weather anywhere, easily.',
-                style: AppTextStyle.quicksandWhite20,
-              ),
-              SizedBox(height: 20.h),
-
-              /// Get Started Button
-              Container(
-                width: 180.w,
-                // padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
-                decoration: BoxDecoration(
-                  // border: Border.all(color: Colors.white, width: 2.w),
-                  gradient: const LinearGradient(
-                    begin: Alignment.bottomRight,
-                    end: Alignment.bottomLeft,
-                    colors: [Colors.blue, Colors.blueAccent],
-                  ),
-                  color: Colors.blueAccent,
-                  borderRadius: BorderRadius.circular(30.r),
-                ),
-                child: TextButton(
-                  onPressed: () {
-                    context.pushNamed(Routes.searchScreen);
-                  },
-                  child: Row(
-                    children: [
-                      const Text(
-                        "Check Weather",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Poppins',
-                          fontSize: 18,
-                        ),
-                      ),
-                      SizedBox(width: 5.w),
-                      const Icon(Icons.arrow_forward, color: Colors.white),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Positioned(
-            bottom: 10.h,
-
-            child: Text(
-              "Simple weather. Anytime.",
-              style: TextStyle(
-                fontSize: 18.sp,
-                fontFamily: 'Quicksand',
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+    return Scaffold();
   }
 }

@@ -9,8 +9,11 @@ import 'package:weather_now/weather/view/ui/screens/weather_result_screen.dart';
 class AppRoutes {
   Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case '/':
-        return MaterialPageRoute(builder: (_) => HomeScreen());
+      case Routes.home:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => HomeScreen(),
+        );
       case Routes.searchScreen:
         // Return the route for the search screen
         return MaterialPageRoute(

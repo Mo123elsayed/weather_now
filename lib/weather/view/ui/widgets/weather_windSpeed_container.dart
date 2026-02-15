@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:weather_now/core/theme/app_text_style.dart';
 
 class WeatherWindspeedContainer extends StatelessWidget {
@@ -42,7 +41,7 @@ class WeatherWindspeedContainer extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 62.h),
+          // SizedBox(height: 62.h),
           Column(
             children: [
               Container(
@@ -51,20 +50,10 @@ class WeatherWindspeedContainer extends StatelessWidget {
                 child: Text(
                   "${windSpeed} km/h",
                   style: AppTextStyle.poppinsWhite20.copyWith(
-                    fontSize: 25.sp,
+                    fontSize: 35.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
-              LinearPercentIndicator(
-                padding: EdgeInsets.symmetric(horizontal: 7.w),
-                lineHeight: 10.0,
-                percent: windSpeed / 100,
-                animation: true,
-                animationDuration: 800,
-                barRadius: const Radius.circular(20),
-                backgroundColor: Colors.black12,
-                progressColor: Colors.lightBlueAccent,
               ),
             ],
           ),

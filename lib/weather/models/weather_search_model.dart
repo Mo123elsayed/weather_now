@@ -1,20 +1,20 @@
 class WeatherSearchModel {
-  final int id;
-  final String name;
-  final String region;
-  final String country;
-  final double lat;
-  final double lon;
-  final String url;
+  final int? id;
+  final String? name;
+  final String? region;
+  final String? country;
+  final double? lat;
+  final double? lon;
+  final String? url;
 
   WeatherSearchModel({
-    required this.id,
+    this.id,
     required this.name,
-    required this.region,
-    required this.country,
-    required this.lat,
-    required this.lon,
-    required this.url,
+    this.region,
+    this.country,
+    this.lat,
+    this.lon,
+    this.url,
   });
 
   factory WeatherSearchModel.fromJson(Map<String, dynamic> json) {
@@ -40,8 +40,6 @@ class WeatherSearchModel {
   /// Throws a [FormatException] if the input list contains objects that are not
   /// valid JSON representations of [WeatherSearchModel] objects.
   static List<WeatherSearchModel> fromJsonList(List<dynamic> jsonList) {
-    return jsonList
-        .map((e) => WeatherSearchModel.fromJson(e))
-        .toList();
+    return jsonList.map((e) => WeatherSearchModel.fromJson(e)).toList();
   }
 }

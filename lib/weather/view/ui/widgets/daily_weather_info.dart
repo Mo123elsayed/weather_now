@@ -5,47 +5,59 @@ import 'package:intl/intl.dart';
 import 'package:weather_now/core/theme/app_text_style.dart';
 
 class DailyWeatherInfo extends StatelessWidget {
-  final List hours;
-  const DailyWeatherInfo({super.key, required this.hours});
-
+  const DailyWeatherInfo({super.key, required this.days});
+  final List days;
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
           child: SizedBox(
             height: 150.h,
             child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: hours.length,
+              scrollDirection: Axis.vertical,
+              itemCount: days.length,
               itemBuilder: (context, index) {
-                final h = hours[index];
+                final d = days[index];
                 return Container(
                   width: 70,
                   margin: const EdgeInsets.symmetric(horizontal: 6),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        formatTo12Hour(h.time),
-                        style: AppTextStyle.poppinsWhite20.copyWith(
+                        formatDayLabel(d.date),
+                        style: AppTextStyle.quicksandWhite20.copyWith(
                           fontSize: 13.sp,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      CachedNetworkImage(
-                        fit: BoxFit.cover,
-                        height: 40.h,
-                        imageUrl: "https:${h.condition.icon}",
-                        width: 40.w,
-                      ),
-                      Text(
-                        "${h.tempC.toInt()}°",
-                        style: AppTextStyle.quicksandWhite20.copyWith(
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      Row(
+                        children: [
+                          CachedNetworkImage(
+                            imageUrl: "https:${d.day.condition.icon}",
+                            width: 40.w,
+                            fit: BoxFit.cover,
+                          ),
+                          SizedBox(width: 20.w),
+                          Text(
+                            "${d.day.maxtempC.round()}°",
+                            style: AppTextStyle.quicksandWhite20.copyWith(
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(width: 20.w),
+
+                          Text(
+                            "${d.day.mintempC.round()}°",
+                            style: AppTextStyle.quicksandWhite20.copyWith(
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -58,8 +70,21 @@ class DailyWeatherInfo extends StatelessWidget {
     );
   }
 
-  String formatTo12Hour(String time) {
-    final dt = DateTime.parse(time);
-    return DateFormat('h:mm a').format(dt);
+  String formatDayLabel(String dateString) {
+    final date = DateTime.parse(dateString);
+    final now = DateTime.now();
+
+    final today = DateTime(now.year, now.month, now.day);
+    final target = DateTime(date.year, date.month, date.day);
+
+    final diff = target.difference(today).inDays;
+
+    if (diff == 0) {
+      return 'Today';
+    } else if (diff == 1) {
+      return 'Tomorrow';
+    } else {
+      return DateFormat('EE').format(date); // Monday, Tuesday...
+    }
   }
 }

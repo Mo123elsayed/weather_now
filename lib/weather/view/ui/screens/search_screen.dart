@@ -67,6 +67,19 @@ class _SearchScreenState extends State<SearchScreen> {
                     // TODO: implement listener
                   },
                   builder: (context, state) {
+                    if (state is WeatherSearchIdle) {
+                      return Align(
+                        heightFactor: 10.5.h,
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Type a city name to search',
+                          textAlign: TextAlign.center,
+                          style: AppTextStyle.quicksandWhite20.copyWith(
+                            fontSize: 16.sp,
+                          ),
+                        ),
+                      );
+                    }
                     if (state is WeatherSearchLoading) {
                       return Center(
                         child: CircularProgressIndicator(color: Colors.white),
@@ -108,7 +121,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             return GestureDetector(
                               onTap: () {
                                 final selectedCity = state.searchResults[index];
-                                
+
                                 context.pushNamed(
                                   Routes.weatherResultScreen,
                                   arguments: selectedCity,
@@ -118,7 +131,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 children: [
                                   ListTile(
                                     title: Text(
-                                      state.searchResults[index].name,
+                                      state.searchResults[index].name!,
                                       style: AppTextStyle.poppinsWhite20
                                           .copyWith(fontSize: 18.sp),
                                     ),

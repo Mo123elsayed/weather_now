@@ -6,8 +6,8 @@ class WeatherRepository {
   final Dio _dio = Dio(
     BaseOptions(
       baseUrl: 'https://api.weatherapi.com/v1/',
-      connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 10),
+      // connectTimeout: const Duration(seconds: 10),
+      // receiveTimeout: const Duration(seconds: 10),
     ),
   );
 
@@ -30,6 +30,7 @@ class WeatherRepository {
           "alerts": "no",
         },
       );
+
       /// fetch the API data and store it in a variable
       final res = response.data;
 
