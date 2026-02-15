@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:weather_now/core/routing/routes.dart';
 import 'package:weather_now/core/services/local_storage.dart';
+import 'package:weather_now/weather/cubits/weather_info_cubit/weather_info_cubit.dart';
 
 import 'package:weather_now/weather/models/weather_search_model.dart';
+import 'package:weather_now/weather/view/ui/screens/search_screen.dart';
+import 'package:weather_now/weather/view/ui/widgets/weather_info_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _checkSavedCity();
+    // _checkSavedCity();
   }
 
   /// Check if there's a saved city in local storage and navigate to the weather result screen if found
@@ -31,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (savedCity != null) {
       Navigator.pushReplacementNamed(
         context,
-        Routes.weatherResultScreen,
+        Routes.home,
         arguments: WeatherSearchModel(name: savedCity),
       );
     }
@@ -40,6 +44,23 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   ///
   Widget build(BuildContext context) {
-    return Scaffold();
+    return BlocProvider(
+      create: (context) => WeatherInfoCubit(),
+      child: Scaffold(
+        body: WeatherInfoWidget(),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                settings: ,
+                builder: (_) => SearchScreen()),
+            );
+          },
+          child: Icon(Icons.search),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      ),
+    );
   }
 }
