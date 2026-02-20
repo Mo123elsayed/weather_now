@@ -153,7 +153,15 @@ class _SearchScreenState extends State<SearchScreen> {
                         ),
                       );
                     }
-                    return SizedBox.shrink();
+                    return Center(
+                      child: Text(
+                        'Type a city name to search',
+                        textAlign: TextAlign.center,
+                        style: AppTextStyle.quicksandWhite20.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    );
                   },
                 ),
               ],

@@ -17,6 +17,7 @@ class AppRoutes {
       case Routes.searchScreen:
         // Return the route for the search screen
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => BlocProvider(
             create: (context) => WeatherSearchCubit(),
             child: SearchScreen(),

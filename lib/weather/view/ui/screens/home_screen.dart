@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:weather_now/core/routing/routes.dart';
 import 'package:weather_now/core/services/local_storage.dart';
+import 'package:weather_now/core/theme/app_text_style.dart';
 import 'package:weather_now/weather/cubits/weather_info_cubit/weather_info_cubit.dart';
-
-import 'package:weather_now/weather/models/weather_search_model.dart';
-import 'package:weather_now/weather/view/ui/screens/search_screen.dart';
 import 'package:weather_now/weather/view/ui/widgets/weather_info_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -21,7 +20,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // _checkSavedCity();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkSavedCity();
+    });
   }
 
   /// Check if there's a saved city in local storage and navigate to the weather result screen if found
@@ -33,34 +34,29 @@ class _HomeScreenState extends State<HomeScreen> {
   void _checkSavedCity() async {
     final savedCity = await LocalStorage.getCity();
     if (savedCity != null) {
-      Navigator.pushReplacementNamed(
-        context,
-        Routes.home,
-        arguments: WeatherSearchModel(name: savedCity),
-      );
+      context.read<WeatherInfoCubit>().getWeather(savedCity);
     }
   }
 
   @override
   ///
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => WeatherInfoCubit(),
-      child: Scaffold(
-        body: WeatherInfoWidget(),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                settings: ,
-                builder: (_) => SearchScreen()),
-            );
-          },
-          child: Icon(Icons.search),
+    return Scaffold(
+      body: WeatherInfoWidget(),
+      floatingActionButton: FloatingActionButton.extended(
+        label: Text(
+          'Search',
+          style: AppTextStyle.poppinsWhite20.copyWith(
+            fontSize: 15.sp,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        onPressed: () {
+          Navigator.pushNamed(context, Routes.searchScreen);
+        },
+        icon: Icon(Icons.travel_explore_rounded, size: 20.sp),
       ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
