@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BackgroundContainer extends StatelessWidget {
-  final containerChild;
-  const BackgroundContainer({super.key, this.containerChild});
+  const BackgroundContainer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +21,6 @@ class BackgroundContainer extends StatelessWidget {
           ],
         ),
       ),
-      child: containerChild,
     );
   }
 }

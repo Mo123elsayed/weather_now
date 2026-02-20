@@ -51,122 +51,118 @@ class _SearchScreenState extends State<SearchScreen> {
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
         ),
       ),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Form(
-          key: _formKey,
-          child: BackgroundContainer(
-            containerChild: Column(
-              children: [
-                SizedBox(height: 10.h),
-                CustomFormField(controller: searchController),
-                SizedBox(height: 20.h),
-                SizedBox(height: 30.h),
-                BlocConsumer<WeatherSearchCubit, WeatherSearchState>(
-                  listener: (context, state) {
-                    // TODO: implement listener
-                  },
-                  builder: (context, state) {
-                    if (state is WeatherSearchIdle) {
-                      return Align(
-                        heightFactor: 10.5.h,
-                        alignment: Alignment.center,
-                        child: Text(
-                          'Type a city name to search',
-                          textAlign: TextAlign.center,
-                          style: AppTextStyle.quicksandWhite20.copyWith(
-                            fontSize: 16.sp,
+      body: Form(
+        key: _formKey,
+        child: Stack(
+          children: [
+            BackgroundContainer(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Column(
+                children: [
+                  SizedBox(height: 10.h),
+                  CustomFormField(controller: searchController),
+                  SizedBox(height: 20.h),
+                  SizedBox(height: 30.h),
+                  BlocConsumer<WeatherSearchCubit, WeatherSearchState>(
+                    listener: (context, state) {
+                      // TODO: implement listener
+                    },
+                    builder: (context, state) {
+                      if (state is WeatherSearchLoading) {
+                        return Center(
+                          child: CircularProgressIndicator(color: Colors.white),
+                        );
+                      }
+                      if (state is WeatherSearchEmpty) {
+                        return Align(
+                          heightFactor: 10.5.h,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Type a correct city name to search',
+                            textAlign: TextAlign.center,
+                            style: AppTextStyle.quicksandWhite20.copyWith(
+                              fontSize: 16.sp,
+                            ),
                           ),
-                        ),
-                      );
-                    }
-                    if (state is WeatherSearchLoading) {
-                      return Center(
-                        child: CircularProgressIndicator(color: Colors.white),
-                      );
-                    }
-                    if (state is WeatherSearchEmpty) {
-                      return Align(
-                        heightFactor: 10.5.h,
-                        alignment: Alignment.center,
-                        child: Text(
-                          'Type a correct city name to search',
-                          textAlign: TextAlign.center,
-                          style: AppTextStyle.quicksandWhite20.copyWith(
-                            fontSize: 16.sp,
+                        );
+                      }
+                      if (state is WeatherSearchFailure) {
+                        // Handle failure state
+                        return Align(
+                          heightFactor: 10.5.h,
+                          alignment: Alignment.center,
+                          child: Text(
+                            state.message,
+                            textAlign: TextAlign.center,
+                            style: AppTextStyle.quicksandWhite20.copyWith(
+                              fontSize: 16.sp,
+                            ),
                           ),
-                        ),
-                      );
-                    }
-                    if (state is WeatherSearchFailure) {
-                      // Handle failure state
-                      return Align(
-                        heightFactor: 10.5.h,
-                        alignment: Alignment.center,
-                        child: Text(
-                          state.message,
-                          textAlign: TextAlign.center,
-                          style: AppTextStyle.quicksandWhite20.copyWith(
-                            fontSize: 16.sp,
-                          ),
-                        ),
-                      );
-                    }
-                    if (state is WeatherSearchSuccess) {
-                      return Expanded(
-                        child: ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          itemCount: state.searchResults.length,
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                              onTap: () {
-                                final selectedCity = state.searchResults[index];
+                        );
+                      }
+                      if (state is WeatherSearchSuccess) {
+                        return Expanded(
+                          child: ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            itemCount: state.searchResults.length,
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  final selectedCity =
+                                      state.searchResults[index];
 
-                                context.pushNamed(
-                                  Routes.weatherResultScreen,
-                                  arguments: selectedCity,
-                                );
-                              },
-                              child: Column(
-                                children: [
-                                  ListTile(
-                                    title: Text(
-                                      state.searchResults[index].name!,
-                                      style: AppTextStyle.poppinsWhite20
-                                          .copyWith(fontSize: 18.sp),
+                                  context.pushNamed(
+                                    Routes.weatherResultScreen,
+                                    arguments: selectedCity,
+                                  );
+                                },
+                                child: Column(
+                                  children: [
+                                    ListTile(
+                                      title: Text(
+                                        state.searchResults[index].name!,
+                                        style: AppTextStyle.poppinsWhite20
+                                            .copyWith(fontSize: 18.sp),
+                                      ),
+                                      subtitle: Text(
+                                        '${state.searchResults[index].region}, ${state.searchResults[index].country}',
+                                        style: AppTextStyle.quicksandWhite20
+                                            .copyWith(
+                                              fontSize: 14.sp,
+                                              color: Colors.white30,
+                                            ),
+                                      ),
                                     ),
-                                    subtitle: Text(
-                                      '${state.searchResults[index].region}, ${state.searchResults[index].country}',
-                                      style: AppTextStyle.quicksandWhite20
-                                          .copyWith(
-                                            fontSize: 14.sp,
-                                            color: Colors.white30,
-                                          ),
-                                    ),
-                                  ),
 
-                                  Divider(thickness: 1, color: Colors.grey),
-                                ],
+                                    Divider(thickness: 1, color: Colors.grey),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      }
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Center(
+                            child: Text(
+                              'Type a city name to search',
+                              textAlign: TextAlign.center,
+                              style: AppTextStyle.quicksandWhite20.copyWith(
+                                fontWeight: FontWeight.bold,
                               ),
-                            );
-                          },
-                        ),
+                            ),
+                          ),
+                        ],
                       );
-                    }
-                    return Center(
-                      child: Text(
-                        'Type a city name to search',
-                        textAlign: TextAlign.center,
-                        style: AppTextStyle.quicksandWhite20.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ],
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

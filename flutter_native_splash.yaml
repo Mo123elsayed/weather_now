@@ -1,17 +1,19 @@
 flutter_native_splash:
+  # IOS and Android below 12 support
   color: "#4A90E2"
   color_dark: "#1B2F5C"
-  image: assets/imgs/clouds-and-sun.png
-  image_dark: assets/imgs/clouds-and-sun.png
+  image: assets/imgs/splash_screen_logo.png
+  image_dark: assets/imgs/splash_screen_logo.png
   android: true
   ios: true
   ios_content_mode: scaleAspectFill  # android_disable_fullscreen: true
 
+  # Android 12+ support  
   android_12:
     color: "#4A90E2"
     color_dark: "#1B2F5C"
-    image: assets/imgs/clouds-and-sun.png
-    image_dark: assets/imgs/clouds-and-sun.png
+    image: assets/imgs/splash_screen_logo.png
+    image_dark: assets/imgs/splash_screen_logo.png
     
 
 

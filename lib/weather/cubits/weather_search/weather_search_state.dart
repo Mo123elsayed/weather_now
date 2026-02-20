@@ -6,7 +6,6 @@ sealed class WeatherSearchState {
 }
 
 final class WeatherSearchInitial extends WeatherSearchState {}
-final class WeatherSearchIdle extends WeatherSearchState {}
 
 final class WeatherSearchLoading extends WeatherSearchState {}
 
