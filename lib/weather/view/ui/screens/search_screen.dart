@@ -143,19 +143,14 @@ class _SearchScreenState extends State<SearchScreen> {
                           ),
                         );
                       }
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Center(
-                            child: Text(
-                              'Type a city name to search',
-                              textAlign: TextAlign.center,
-                              style: AppTextStyle.quicksandWhite20.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                      return Center(
+                        child: Text(
+                          'Type a city name to search',
+                          textAlign: TextAlign.center,
+                          style: AppTextStyle.quicksandWhite20.copyWith(
+                            fontWeight: FontWeight.bold,
                           ),
-                        ],
+                        ),
                       );
                     },
                   ),
